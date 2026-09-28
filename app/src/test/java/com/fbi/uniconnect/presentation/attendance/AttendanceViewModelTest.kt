@@ -1,14 +1,20 @@
 package com.fbi.uniconnect.presentation.attendance
 
+import com.fbi.uniconnect.MainDispatcherRule
+
 import com.fbi.uniconnect.domain.model.Attendance
 import com.fbi.uniconnect.domain.model.AttendanceStatus
 import com.fbi.uniconnect.domain.repository.AttendanceRepository
 import com.fbi.uniconnect.domain.usecase.attendance.GetAttendancesUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Rule
 import org.junit.Test
 
 class AttendanceViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun loads_attendances_into_ui_state() {
         val expected = listOf(
