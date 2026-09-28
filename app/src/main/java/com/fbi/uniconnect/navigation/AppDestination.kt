@@ -23,6 +23,7 @@ enum class AppDestination(
     Schedule("schedule", "Jadwal", Icons.Default.CalendarMonth, true),
     Attendance("attendance", "Kehadiran", Icons.Default.Person, true),
     Grades("grades", "Nilai", Icons.Default.School, true),
+    Krs("krs", "KRS", Icons.Default.School, true),
     Profile("profile", "Profil", Icons.Default.Person, true),
     LecturerDashboard("lecturer-dashboard", "Dashboard Dosen", Icons.Default.School),
     AdminDashboard("admin-dashboard", "Dashboard Admin", Icons.Default.Person),
