@@ -1,11 +1,12 @@
 package com.fbi.uniconnect.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun UniConnectTextField(
@@ -17,6 +18,7 @@ fun UniConnectTextField(
     supportingText: String? = null,
     isError: Boolean = false,
     singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     OutlinedTextField(
         value = value,
@@ -27,6 +29,7 @@ fun UniConnectTextField(
         supportingText = supportingText?.let { { Text(it) } },
         isError = isError,
         singleLine = singleLine,
+        visualTransformation = visualTransformation,
         shape = MaterialTheme.shapes.medium,
     )
 }

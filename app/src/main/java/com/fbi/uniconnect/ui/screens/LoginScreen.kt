@@ -4,12 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,51 +15,81 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fbi.uniconnect.presentation.auth.AuthViewModel
+import com.fbi.uniconnect.ui.components.UniConnectPrimaryButton
+import com.fbi.uniconnect.ui.components.UniConnectSecondaryButton
+import com.fbi.uniconnect.ui.components.UniConnectTextField
+import com.fbi.uniconnect.ui.theme.UniConnectSpacing
 
 @Composable
 fun LoginScreen(
     onLogin: () -> Unit,
     onRegister: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(UniConnectSpacing.xxl),
         verticalArrangement = Arrangement.Center,
     ) {
         Text("Masuk ke UniConnect")
-        Spacer(Modifier.height(16.dp))
-        OutlinedTextField(
+        Spacer(Modifier.height(UniConnectSpacing.lg))
+
+        UniConnectTextField(
             value = email,
-            onValueChange = { email = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Email") },
+            onValueChange = {
+                email = it
+                viewModel.clearError()
+            },
+            label = "Email",
         )
-        Spacer(Modifier.height(8.dp))
-        OutlinedTextField(
+
+        Spacer(Modifier.height(UniConnectSpacing.sm))
+
+        UniConnectTextField(
             value = password,
-            onValueChange = { password = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Password") },
+            onValueChange = {
+                password = it
+                viewModel.clearError()
+            },
+            label = "Password",
+            singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
         )
-        Spacer(Modifier.height(16.dp))
-        Button(
-            onClick = onLogin,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text("Login")
+
+        Spacer(Modifier.height(UniConnectSpacing.lg))
+
+        uiState.errorMessage?.let {
+            Text(it)
+            Spacer(Modifier.height(UniConnectSpacing.sm))
         }
-        Spacer(Modifier.height(8.dp))
-        OutlinedButton(
+
+        UniConnectPrimaryButton(
+            text = "Login",
+            enabled = !uiState.isLoading,
+            onClick = {
+                viewModel.login(email, password, onLogin)
+            },
+        )
+
+        Spacer(Modifier.height(UniConnectSpacing.sm))
+
+        UniConnectSecondaryButton(
+            text = "Buat akun",
+            enabled = !uiState.isLoading,
             onClick = onRegister,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text("Buat akun")
+        )
+
+        if (uiState.isLoading) {
+            Spacer(Modifier.height(UniConnectSpacing.lg))
+            CircularProgressIndicator()
         }
     }
 }
