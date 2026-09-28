@@ -1,8 +1,11 @@
 package com.fbi.uniconnect.presentation.schedule
+
+import com.fbi.uniconnect.MainDispatcherRule
 import com.fbi.uniconnect.domain.model.*
 import com.fbi.uniconnect.domain.repository.ScheduleRepository
 import com.fbi.uniconnect.domain.usecase.schedule.GetSchedulesUseCase
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
 class ScheduleViewModelTest{@Test fun loads_schedules_into_ui_state(){
 val expected=listOf(CourseSchedule("1","Pemrograman Mobile","Dosen",DayOfWeek.MONDAY,"08:00","09:40","Lab"))
