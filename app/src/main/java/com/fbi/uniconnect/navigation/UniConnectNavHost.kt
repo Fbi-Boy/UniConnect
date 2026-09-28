@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.fbi.uniconnect.ui.screens.AdminDashboardScreen
 import com.fbi.uniconnect.ui.screens.AttendanceScreen
+import com.fbi.uniconnect.ui.screens.GradesScreen
 import com.fbi.uniconnect.ui.screens.DashboardScreen
 import com.fbi.uniconnect.ui.screens.GradesScreen
 import com.fbi.uniconnect.ui.screens.LecturerDashboardScreen
@@ -67,5 +68,6 @@ fun UniConnectNavHost(navController: NavHostController) {
         composable(AppDestination.LecturerDashboard.route) { LecturerDashboardScreen() }
         composable(AppDestination.AdminDashboard.route) { AdminDashboardScreen() }
         composable(AppDestination.Attendance.route) { AttendanceScreen() }
+        composable(AppDestination.Grades.route) { GradesScreen() }
     }
 }
