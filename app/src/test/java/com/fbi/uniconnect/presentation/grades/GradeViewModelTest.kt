@@ -7,7 +7,7 @@ import org.junit.Test
 class GradeViewModelTest {
  @Test fun loads_grades_into_ui_state() {
   val expected=listOf(Grade("1","Pemrograman Mobile",3,92.0,GradeLetter.A))
-  val repository=object:GradeRepository{override fun getGrades()=expected}
+  val repository=object:GradeRepository{override suspend fun getGrades()=expected}
   val vm=GradeViewModel(GetGradesUseCase(repository))
   assertFalse(vm.uiState.value.isLoading)
   assertEquals(expected,vm.uiState.value.grades)
