@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetKrsUseCase @Inject constructor(
     private val repository: KrsRepository,
 ) {
-    operator fun invoke(): List<Krs> = repository.getKrs()
+    suspend operator fun invoke(): List<Krs> = repository.getKrs()
 }
