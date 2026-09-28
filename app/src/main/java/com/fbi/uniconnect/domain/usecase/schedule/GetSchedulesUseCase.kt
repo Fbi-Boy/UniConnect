@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetSchedulesUseCase @Inject constructor(
     private val repository: ScheduleRepository,
 ) {
-    operator fun invoke(): List<CourseSchedule> = repository.getSchedules()
+    suspend operator fun invoke(): List<CourseSchedule> = repository.getSchedules()
 }
