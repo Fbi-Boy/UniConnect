@@ -9,6 +9,6 @@ import javax.inject.Inject
 class AssignmentRepositoryImpl @Inject constructor(
     private val localDataSource: AssignmentLocalDataSource,
 ) : AssignmentRepository {
-    override fun getAssignments(): List<Assignment> =
+    override suspend fun getAssignments(): List<Assignment> =
         localDataSource.getAssignments().map { it.toDomain() }
 }
