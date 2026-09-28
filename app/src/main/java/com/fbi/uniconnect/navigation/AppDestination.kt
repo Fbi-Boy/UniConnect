@@ -24,4 +24,5 @@ enum class AppDestination(
     Grades("grades", "Nilai", Icons.Default.School, true),
     Profile("profile", "Profil", Icons.Default.Person, true),
     LecturerDashboard("lecturer-dashboard", "Dashboard Dosen", Icons.Default.School),
+    AdminDashboard("admin-dashboard", "Dashboard Admin", Icons.Default.Person),
 }
