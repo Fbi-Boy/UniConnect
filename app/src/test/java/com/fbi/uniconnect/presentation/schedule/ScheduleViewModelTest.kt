@@ -7,7 +7,10 @@ import com.fbi.uniconnect.domain.usecase.schedule.GetSchedulesUseCase
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
-class ScheduleViewModelTest{@Test fun loads_schedules_into_ui_state(){
+class ScheduleViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+@Test fun loads_schedules_into_ui_state(){
 val expected=listOf(CourseSchedule("1","Pemrograman Mobile","Dosen",DayOfWeek.MONDAY,"08:00","09:40","Lab"))
 val repository=object:ScheduleRepository{override suspend fun getSchedules()=expected}
 val viewModel=ScheduleViewModel(GetSchedulesUseCase(repository))
