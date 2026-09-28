@@ -1,5 +1,6 @@
 package com.fbi.uniconnect.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,28 +14,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fbi.uniconnect.presentation.student.StudentViewModel
 import com.fbi.uniconnect.ui.components.SectionCard
+import com.fbi.uniconnect.ui.components.UniConnectLoading
 
 @Composable
-fun DashboardScreen(
-    viewModel: StudentViewModel = hiltViewModel(),
-) {
-    val student by viewModel.student.collectAsStateWithLifecycle()
+fun DashboardScreen(viewModel: StudentViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-    ) {
-        Text(
-            text = "Halo, ${student?.name ?: "Mahasiswa"}!",
-            style = MaterialTheme.typography.headlineSmall,
+    when {
+        state.isLoading -> UniConnectLoading()
+        state.errorMessage != null -> Text(
+            text = state.errorMessage,
+            modifier = Modifier.padding(20.dp),
+            color = MaterialTheme.colorScheme.error,
         )
-        Text("Ringkasan aktivitas akademikmu")
-
-        student?.let {
-            SectionCard("IPK Saat Ini") { Text("%.2f".format(it.gpa)) }
-            SectionCard("Program Studi") { Text(it.studyProgram) }
-            SectionCard("Semester") { Text(it.semester.toString()) }
+        state.student != null -> {
+            val student = state.student
+            Column(
+                modifier = Modifier.fillMaxSize().padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = "Halo, ${student?.name ?: "Mahasiswa"}!",
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                Text("Ringkasan aktivitas akademikmu")
+                student?.let {
+                    SectionCard("IPK Saat Ini") { Text("%.2f".format(it.gpa)) }
+                    SectionCard("Program Studi") { Text(it.studyProgram) }
+                    SectionCard("Semester") { Text(it.semester.toString()) }
+                }
+            }
         }
     }
 }
