@@ -18,7 +18,7 @@ class LecturerViewModelTest {
             email = "fabi@example.com",
         )
         val repository = object : LecturerRepository {
-            override fun getCurrentLecturer(): Lecturer = expected
+            override suspend fun getCurrentLecturer(): Lecturer = expected
         }
 
         val viewModel = LecturerViewModel(GetCurrentLecturerUseCase(repository))
