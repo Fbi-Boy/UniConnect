@@ -11,6 +11,6 @@ import javax.inject.Singleton
 class AdminRepositoryImpl @Inject constructor(
     private val localDataSource: AdminLocalDataSource,
 ) : AdminRepository {
-    override fun getCurrentAdmin(): Admin =
+    override suspend fun getCurrentAdmin(): Admin =
         localDataSource.getCurrentAdmin().toDomain()
 }
