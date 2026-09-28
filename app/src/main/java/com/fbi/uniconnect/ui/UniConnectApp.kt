@@ -1,5 +1,6 @@
 package com.fbi.uniconnect.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -22,36 +23,43 @@ fun UniConnectApp() {
         val navController = rememberNavController()
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
+        val showMainChrome = AppDestination.entries
+            .firstOrNull { it.route == currentRoute }
+            ?.showInBottomBar == true
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            AppDestination.entries
-                                .firstOrNull { it.route == currentRoute }
-                                ?.label
-                                ?: "UniConnect",
-                        )
-                    },
-                )
+                if (showMainChrome) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                AppDestination.entries
+                                    .firstOrNull { it.route == currentRoute }
+                                    ?.label
+                                    ?: "UniConnect",
+                            )
+                        },
+                    )
+                }
             },
             bottomBar = {
-                BottomNavigationBar(
-                    currentRoute = currentRoute,
-                    onDestinationSelected = { destination ->
-                        navController.navigate(destination.route) {
-                            popUpTo(AppDestination.Dashboard.route) {
-                                saveState = true
+                if (showMainChrome) {
+                    BottomNavigationBar(
+                        currentRoute = currentRoute,
+                        onDestinationSelected = { destination ->
+                            navController.navigate(destination.route) {
+                                popUpTo(AppDestination.Dashboard.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                )
+                        },
+                    )
+                }
             },
         ) { padding ->
-            androidx.compose.foundation.layout.Box(Modifier.padding(padding)) {
+            Box(Modifier.padding(padding)) {
                 UniConnectNavHost(navController)
             }
         }

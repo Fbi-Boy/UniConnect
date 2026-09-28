@@ -18,18 +18,20 @@ fun BottomNavigationBar(
     onDestinationSelected: (AppDestination) -> Unit,
 ) {
     NavigationBar {
-        AppDestination.entries.forEach { destination ->
-            NavigationBarItem(
-                selected = currentRoute == destination.route,
-                onClick = { onDestinationSelected(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.icon,
-                        contentDescription = destination.label,
-                    )
-                },
-                label = { Text(destination.label) },
-            )
-        }
+        AppDestination.entries
+            .filter { it.showInBottomBar }
+            .forEach { destination ->
+                NavigationBarItem(
+                    selected = currentRoute == destination.route,
+                    onClick = { onDestinationSelected(destination) },
+                    icon = {
+                        Icon(
+                            imageVector = destination.icon,
+                            contentDescription = destination.label,
+                        )
+                    },
+                    label = { Text(destination.label) },
+                )
+            }
     }
 }
