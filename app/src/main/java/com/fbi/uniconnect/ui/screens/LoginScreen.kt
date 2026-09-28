@@ -61,6 +61,7 @@ fun LoginScreen(
             },
             label = "Password",
             singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
         )
 
         Spacer(Modifier.height(UniConnectSpacing.lg))
