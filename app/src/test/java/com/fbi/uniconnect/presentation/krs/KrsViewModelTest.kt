@@ -1,8 +1,11 @@
 package com.fbi.uniconnect.presentation.krs
+
+import com.fbi.uniconnect.MainDispatcherRule
 import com.fbi.uniconnect.domain.model.*
 import com.fbi.uniconnect.domain.repository.KrsRepository
 import com.fbi.uniconnect.domain.usecase.krs.GetKrsUseCase
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
 class KrsViewModelTest{
 @Test fun loads_krs_into_ui_state(){
