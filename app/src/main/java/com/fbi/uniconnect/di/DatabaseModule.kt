@@ -2,7 +2,10 @@ package com.fbi.uniconnect.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.fbi.uniconnect.core.database.AdminDao
+import com.fbi.uniconnect.core.database.AcademicSyncMetadataDao
 import com.fbi.uniconnect.core.database.AnnouncementDao
 import com.fbi.uniconnect.core.database.AssignmentDao
 import com.fbi.uniconnect.core.database.AttendanceDao
@@ -24,6 +27,21 @@ import javax.inject.Singleton
 object DatabaseModule {
     private const val DATABASE_NAME = "uniconnect.db"
 
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS academic_sync_metadata (
+                    id TEXT NOT NULL,
+                    lastAttemptAtEpochMillis INTEGER NOT NULL,
+                    lastSuccessfulAtEpochMillis INTEGER,
+                    PRIMARY KEY(id)
+                )
+                """.trimIndent(),
+            )
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(
@@ -32,7 +50,7 @@ object DatabaseModule {
         context,
         UniConnectDatabase::class.java,
         DATABASE_NAME,
-    ).build()
+    ).addMigrations(MIGRATION_1_2).build()
 
     @Provides fun provideStudentDao(db: UniConnectDatabase): StudentDao = db.studentDao()
     @Provides fun provideLecturerDao(db: UniConnectDatabase): LecturerDao = db.lecturerDao()
@@ -43,4 +61,6 @@ object DatabaseModule {
     @Provides fun provideKrsDao(db: UniConnectDatabase): KrsDao = db.krsDao()
     @Provides fun provideAssignmentDao(db: UniConnectDatabase): AssignmentDao = db.assignmentDao()
     @Provides fun provideAnnouncementDao(db: UniConnectDatabase): AnnouncementDao = db.announcementDao()
+    @Provides fun provideAcademicSyncMetadataDao(db: UniConnectDatabase): AcademicSyncMetadataDao =
+        db.academicSyncMetadataDao()
 }

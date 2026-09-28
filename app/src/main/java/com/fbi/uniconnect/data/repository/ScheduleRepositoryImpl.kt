@@ -19,7 +19,7 @@ class ScheduleRepositoryImpl @Inject constructor(
             is NetworkResult.Success -> {
                 if (result.data.isNotEmpty()) {
                     local.saveSchedules(result.data)
-                    result.data
+                    result.data.map { it.toDomain() }
                 } else {
                     local.getSchedules().map { it.toDomain() }
                 }

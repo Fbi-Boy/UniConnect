@@ -14,8 +14,9 @@ import androidx.room.RoomDatabase
         KrsEntity::class,
         AssignmentEntity::class,
         AnnouncementEntity::class,
+        AcademicSyncMetadataEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class UniConnectDatabase : RoomDatabase() {
@@ -28,4 +29,5 @@ abstract class UniConnectDatabase : RoomDatabase() {
     abstract fun krsDao(): KrsDao
     abstract fun assignmentDao(): AssignmentDao
     abstract fun announcementDao(): AnnouncementDao
+    abstract fun academicSyncMetadataDao(): AcademicSyncMetadataDao
 }
