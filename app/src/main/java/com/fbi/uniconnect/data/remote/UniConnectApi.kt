@@ -5,9 +5,22 @@ import retrofit2.http.GET
 interface UniConnectApi {
     @GET("health")
     suspend fun health(): HealthResponse
-}
 
-@kotlinx.serialization.Serializable
-data class HealthResponse(
-    val status: String,
-)
+    @GET("api/v1/schedules")
+    suspend fun getSchedules(): List<ScheduleDto>
+
+    @GET("api/v1/attendance")
+    suspend fun getAttendance(): List<AttendanceDto>
+
+    @GET("api/v1/grades")
+    suspend fun getGrades(): List<GradeDto>
+
+    @GET("api/v1/krs")
+    suspend fun getKrs(): List<KrsDto>
+
+    @GET("api/v1/assignments")
+    suspend fun getAssignments(): List<AssignmentDto>
+
+    @GET("api/v1/announcements")
+    suspend fun getAnnouncements(): List<AnnouncementDto>
+}

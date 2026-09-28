@@ -17,6 +17,10 @@ class ScheduleLocalDataSource @Inject constructor(
         return defaultSchedules().also { dao.insertAll(it.map { item -> item.toEntity() }) }
     }
 
+    suspend fun saveSchedules(schedules: List<CourseSchedule>) {
+        dao.insertAll(schedules.map { it.toEntity() })
+    }
+
     private fun defaultSchedules() = listOf(
         CourseSchedule("schedule-001", "Pemrograman Mobile", "Budi Santoso, M.Kom.", DayOfWeek.MONDAY, "08:00", "09:40", "Lab RPL 1"),
         CourseSchedule("schedule-002", "Basis Data", "Siti Aminah, M.Kom.", DayOfWeek.TUESDAY, "10:00", "11:40", "Ruang 204"),
