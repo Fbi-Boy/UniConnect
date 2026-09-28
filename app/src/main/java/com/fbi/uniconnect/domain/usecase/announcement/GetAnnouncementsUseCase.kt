@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetAnnouncementsUseCase @Inject constructor(
     private val repository: AnnouncementRepository,
 ) {
-    operator fun invoke(): List<Announcement> = repository.getAnnouncements()
+    suspend operator fun invoke(): List<Announcement> = repository.getAnnouncements()
 }
