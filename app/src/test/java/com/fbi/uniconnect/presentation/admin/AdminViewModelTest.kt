@@ -12,7 +12,7 @@ class AdminViewModelTest {
     fun loads_current_admin_into_ui_state() {
         val expected = Admin("admin-001", "Fabi", "admin@example.com")
         val repository = object : AdminRepository {
-            override fun getCurrentAdmin(): Admin = expected
+            override suspend fun getCurrentAdmin(): Admin = expected
         }
         val viewModel = AdminViewModel(GetCurrentAdminUseCase(repository))
         assertFalse(viewModel.uiState.value.isLoading)
