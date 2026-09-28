@@ -36,7 +36,7 @@ fun AssignmentsScreen(
                 state.errorMessage ?: "Terjadi kesalahan.",
                 color = MaterialTheme.colorScheme.error,
             )
-            state.assignments.isEmpty() -> UniConnectEmptyState(message = "Belum ada tugas.")
+            state.assignments.isEmpty() -> UniConnectEmptyState(title = "Belum ada tugas", description = "Belum ada tugas yang tersedia.")
             else -> LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(state.assignments, key = { it.id }) { assignment ->
                     UniConnectAssignmentCard(assignment)
