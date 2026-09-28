@@ -1,6 +1,7 @@
 package com.fbi.uniconnect.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -14,6 +15,7 @@ import com.fbi.uniconnect.navigation.UniConnectNavHost
 import com.fbi.uniconnect.ui.components.BottomNavigationBar
 import com.fbi.uniconnect.ui.theme.UniConnectTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UniConnectApp() {
     UniConnectTheme {
