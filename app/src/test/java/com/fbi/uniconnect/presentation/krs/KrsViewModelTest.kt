@@ -7,6 +7,6 @@ import org.junit.Test
 class KrsViewModelTest{
 @Test fun loads_krs_into_ui_state(){
 val expected=listOf(Krs("1","Pemrograman Mobile","TIF301",3,"Budi Santoso, M.Kom.",KrsStatus.APPROVED))
-val repository=object:KrsRepository{override fun getKrs()=expected}
+val repository=object:KrsRepository{override suspend fun getKrs()=expected}
 val vm=KrsViewModel(GetKrsUseCase(repository))
 assertFalse(vm.uiState.value.isLoading);assertEquals(expected,vm.uiState.value.courses)}}
