@@ -13,7 +13,7 @@ class AssignmentViewModelTest {
     @Test
     fun loadsAssignmentsIntoUiState() = runTest(StandardTestDispatcher()) {
         val repository = object : AssignmentRepository {
-            override fun getAssignments(): List<Assignment> = listOf(
+            override suspend fun getAssignments(): List<Assignment> = listOf(
                 Assignment(
                     "1", "Tugas", "Pemrograman Mobile", "Deskripsi",
                     "30 September 2026", "23:59", AssignmentStatus.PENDING,
