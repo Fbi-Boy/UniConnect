@@ -24,7 +24,8 @@ class AcademicSyncManagerTest {
         val result = AcademicSyncManager(FakeRemote(), store).sync(1_000L)
 
         assertTrue(result.isFullySuccessful)
-        assertEquals(1, store.totalWrites)
+        assertEquals(6, store.totalWrites)
+        assertEquals(1, store.metadataWrites)
         assertEquals(1, store.scheduleWrites)
         assertEquals(1, store.attendanceWrites)
         assertEquals(1, store.gradeWrites)
