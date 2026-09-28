@@ -17,39 +17,44 @@ import com.fbi.uniconnect.presentation.student.StudentViewModel
 import com.fbi.uniconnect.ui.components.UniConnectAvatar
 import com.fbi.uniconnect.ui.components.UniConnectCard
 import com.fbi.uniconnect.ui.components.UniConnectLoading
+import com.fbi.uniconnect.ui.components.UniConnectStatus
 import com.fbi.uniconnect.ui.components.UniConnectStatusChip
-import com.fbi.uniconnect.ui.theme.UniConnectStatus
 
 @Composable
 fun ProfileScreen(viewModel: StudentViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val student = state.student
 
     when {
         state.isLoading -> UniConnectLoading()
         state.errorMessage != null -> Text(
-            text = state.errorMessage,
+            text = state.errorMessage ?: "Data mahasiswa gagal dimuat.",
             modifier = Modifier.padding(20.dp),
             color = MaterialTheme.colorScheme.error,
         )
-        state.student != null -> StudentProfileContent(state.student!!)
+        student != null -> StudentProfileContent(student)
     }
 }
 
 @Composable
 private fun StudentProfileContent(student: Student) {
+    val initials = student.name
+        .split(" ")
+        .filter(String::isNotBlank)
+        .take(2)
+        .joinToString("") { it.first().toString() }
+
     Column(
         modifier = Modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         UniConnectCard {
-            UniConnectAvatar(
-                name = student.name,
-                subtitle = student.nim,
-                size = 64.dp,
-            )
+            UniConnectAvatar(initials = initials)
+            Text(student.name, style = MaterialTheme.typography.titleLarge)
+            Text(student.nim, style = MaterialTheme.typography.bodyMedium)
             Text(student.studyProgram, style = MaterialTheme.typography.bodyLarge)
             UniConnectStatusChip(
-                label = "Mahasiswa Aktif",
+                text = "Mahasiswa Aktif",
                 status = UniConnectStatus.SUCCESS,
             )
         }
