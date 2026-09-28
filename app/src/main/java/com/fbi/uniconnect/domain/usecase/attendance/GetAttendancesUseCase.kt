@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetAttendancesUseCase @Inject constructor(
     private val repository: AttendanceRepository,
 ) {
-    operator fun invoke(): List<Attendance> = repository.getAttendances()
+    suspend operator fun invoke(): List<Attendance> = repository.getAttendances()
 }
