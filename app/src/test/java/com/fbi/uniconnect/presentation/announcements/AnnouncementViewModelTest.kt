@@ -1,5 +1,7 @@
 package com.fbi.uniconnect.presentation.announcements
 
+import com.fbi.uniconnect.MainDispatcherRule
+
 import com.fbi.uniconnect.domain.model.Announcement
 import com.fbi.uniconnect.domain.model.AnnouncementCategory
 import com.fbi.uniconnect.domain.repository.AnnouncementRepository
@@ -7,9 +9,13 @@ import com.fbi.uniconnect.domain.usecase.announcement.GetAnnouncementsUseCase
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 class AnnouncementViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun loadsAnnouncementsIntoUiState() = runTest(StandardTestDispatcher()) {
         val repository = object : AnnouncementRepository {
