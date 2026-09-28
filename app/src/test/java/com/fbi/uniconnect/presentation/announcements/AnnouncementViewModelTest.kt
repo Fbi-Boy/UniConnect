@@ -13,7 +13,7 @@ class AnnouncementViewModelTest {
     @Test
     fun loadsAnnouncementsIntoUiState() = runTest(StandardTestDispatcher()) {
         val repository = object : AnnouncementRepository {
-            override fun getAnnouncements(): List<Announcement> = listOf(
+            override suspend fun getAnnouncements(): List<Announcement> = listOf(
                 Announcement(
                     "1", "Pengumuman", "Isi", "Akademik",
                     "28 September 2026", AnnouncementCategory.ACADEMIC,
