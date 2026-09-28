@@ -11,4 +11,4 @@ enum class UserRole {
     STUDENT,
     LECTURER,
     ADMIN,
-)
+}
