@@ -11,6 +11,6 @@ import javax.inject.Singleton
 class KrsRepositoryImpl @Inject constructor(
     private val localDataSource: KrsLocalDataSource,
 ) : KrsRepository {
-    override fun getKrs(): List<Krs> =
+    override suspend fun getKrs(): List<Krs> =
         localDataSource.getKrs().map { it.toDomain() }
 }
