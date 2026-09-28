@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetCurrentStudentUseCase @Inject constructor(
     private val repository: StudentRepository,
 ) {
-    operator fun invoke(): Student = repository.getCurrentStudent()
+    suspend operator fun invoke(): Student = repository.getCurrentStudent()
 }
