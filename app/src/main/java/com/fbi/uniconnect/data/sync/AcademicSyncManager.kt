@@ -1,5 +1,12 @@
 package com.fbi.uniconnect.data.sync
 
+import com.fbi.uniconnect.core.network.NetworkResult
+import com.fbi.uniconnect.data.model.Announcement
+import com.fbi.uniconnect.data.model.Assignment
+import com.fbi.uniconnect.data.model.Attendance
+import com.fbi.uniconnect.data.model.CourseSchedule
+import com.fbi.uniconnect.data.model.Grade
+import com.fbi.uniconnect.data.model.Krs
 import com.fbi.uniconnect.data.remote.AcademicRemoteSource
 import javax.inject.Inject
 import kotlinx.coroutines.async
@@ -13,45 +20,23 @@ class AcademicSyncManager @Inject constructor(
     suspend fun sync(nowEpochMillis: Long = System.currentTimeMillis()): AcademicSyncResult =
         coroutineScope {
             val operations = listOf(
-                async { SyncResource.SCHEDULES to remote.getSchedules() },
-                async { SyncResource.ATTENDANCE to remote.getAttendances() },
-                async { SyncResource.GRADES to remote.getGrades() },
-                async { SyncResource.KRS to remote.getKrs() },
-                async { SyncResource.ASSIGNMENTS to remote.getAssignments() },
-                async { SyncResource.ANNOUNCEMENTS to remote.getAnnouncements() },
+                SyncOperation(SyncResource.SCHEDULES, { remote.getSchedules() }) { store.replaceSchedules(it) },
+                SyncOperation(SyncResource.ATTENDANCE, { remote.getAttendances() }) { store.replaceAttendances(it) },
+                SyncOperation(SyncResource.GRADES, { remote.getGrades() }) { store.replaceGrades(it) },
+                SyncOperation(SyncResource.KRS, { remote.getKrs() }) { store.replaceKrs(it) },
+                SyncOperation(SyncResource.ASSIGNMENTS, { remote.getAssignments() }) { store.replaceAssignments(it) },
+                SyncOperation(SyncResource.ANNOUNCEMENTS, { remote.getAnnouncements() }) { store.replaceAnnouncements(it) },
             )
 
-            val results = operations.awaitAll()
-            val states = linkedMapOf<SyncResource, SyncResourceState>()
-
-            results.forEach { (resource, result) ->
-                states[resource] = when (result) {
-                    is com.fbi.uniconnect.core.network.NetworkResult.Success -> {
-                        if (result.data.isEmpty()) {
-                            SyncResourceState.EmptyRemote
-                        } else {
-                            when (resource) {
-                                SyncResource.SCHEDULES -> store.replaceSchedules(result.data as List<com.fbi.uniconnect.data.model.CourseSchedule>)
-                                SyncResource.ATTENDANCE -> store.replaceAttendances(result.data as List<com.fbi.uniconnect.data.model.Attendance>)
-                                SyncResource.GRADES -> store.replaceGrades(result.data as List<com.fbi.uniconnect.data.model.Grade>)
-                                SyncResource.KRS -> store.replaceKrs(result.data as List<com.fbi.uniconnect.data.model.Krs>)
-                                SyncResource.ASSIGNMENTS -> store.replaceAssignments(result.data as List<com.fbi.uniconnect.data.model.Assignment>)
-                                SyncResource.ANNOUNCEMENTS -> store.replaceAnnouncements(result.data as List<com.fbi.uniconnect.data.model.Announcement>)
-                            }
-                            SyncResourceState.Updated
-                        }
-                    }
-                    is com.fbi.uniconnect.core.network.NetworkResult.HttpError -> SyncResourceState.Failed(result)
-                    is com.fbi.uniconnect.core.network.NetworkResult.NetworkError -> SyncResourceState.Failed(result)
-                }
-            }
+            val states = operations.map { operation ->
+                async { operation.resource to execute(operation) }
+            }.awaitAll().toMap()
 
             val completedAt = System.currentTimeMillis()
             val fullySuccessful = states.values.all {
                 it is SyncResourceState.Updated || it is SyncResourceState.EmptyRemote
             }
-            val previousSuccessfulAt = store.getLastSuccessfulSyncAt()
-            val successfulAt = if (fullySuccessful) completedAt else previousSuccessfulAt
+            val successfulAt = if (fullySuccessful) completedAt else store.getLastSuccessfulSyncAt()
             store.saveSyncMetadata(nowEpochMillis, successfulAt)
 
             AcademicSyncResult(
@@ -61,4 +46,24 @@ class AcademicSyncManager @Inject constructor(
                 lastSuccessfulSyncAtEpochMillis = successfulAt,
             )
         }
+
+    private suspend fun <T> execute(operation: SyncOperation<T>): SyncResourceState =
+        when (val result = operation.request()) {
+            is NetworkResult.Success -> {
+                if (result.data.isEmpty()) {
+                    SyncResourceState.EmptyRemote
+                } else {
+                    operation.save(result.data)
+                    SyncResourceState.Updated
+                }
+            }
+            is NetworkResult.HttpError -> SyncResourceState.Failed(result)
+            is NetworkResult.NetworkError -> SyncResourceState.Failed(result)
+        }
+
+    private data class SyncOperation<T>(
+        val resource: SyncResource,
+        val request: suspend () -> NetworkResult<List<T>>,
+        val save: suspend (List<T>) -> Unit,
+    )
 }
