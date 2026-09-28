@@ -1,29 +1,49 @@
-# UniConnect
+# UniConnect — Integrated Campus Super App
 
 UniConnect is a native Android campus super app built with Kotlin and Jetpack Compose.
 
-## Current Scope
+## Sprint workflow
 
-- Student dashboard
-- Authentication UI
-- Academic schedule
-- Grades
-- Student profile
-- Assignments
-- Campus announcements
-- Campus events
+Each sprint is developed on its own branch and merged to `main) only after:
 
-## Architecture Direction
+1. Implementation is complete.
+2. Build and lint pass.
+3. Architecture, security, UX, and maintainability are reviewed.
+4. Any failure is debugged and revalidated.
+5. A pull request is reviewed and merged.
 
-The project is organized toward a clean separation between presentation, navigation, data models, and repositories.
+## Architecture direction
 
-## Tech Stack
+```
+Presentation (Compose + ViewModel)
+        ↓
+Domain (Use Cases + Repository Contracts)
+        ↓
+Data (Repository Implementations)
+     ↙       ↘
+  Room     Retrofit
+```
 
-- Kotlin
-- Android
-- Jetpack Compose
-- Material 3
+The project uses a pragmatic Clean Architecture approach: enough separation for maintainability without unnecessary boilerplate.
 
-## Status
+## Current stack
 
-Early development — core UI and application foundations are being built incrementally.
+- Kotlin 2.0.21
+- Android Gradle Plugin 8.7.3
+- Jetpack Compose + Material 3
+- Navigation Compose
+- Gradle 8.9
+- JDK 17
+
+## Planned stack
+
+- ViewModel + Coroutines + Flow
+- Room for local persistence
+- Retrofit for REST API integration
+- Hilt for dependency injection
+- Unit and UI testing
+- Role-based student, lecturer, and admin experiences
+
+## Development standard
+
+Features are delivered as vertical slices. A completed slice should be runnable and testable before moving to the next one.
