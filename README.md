@@ -4,7 +4,7 @@ UniConnect is a native Android campus super app built with Kotlin and Jetpack Co
 
 ## Sprint workflow
 
-Each sprint is developed on its own branch and merged to `main) only after:
+Each sprint is developed on its own branch and merged to `main` only after:
 
 1. Implementation is complete.
 2. Build and lint pass.
