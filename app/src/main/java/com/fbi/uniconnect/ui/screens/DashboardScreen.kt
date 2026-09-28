@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fbi.uniconnect.domain.model.Student
 import com.fbi.uniconnect.presentation.student.StudentViewModel
 import com.fbi.uniconnect.ui.components.SectionCard
 import com.fbi.uniconnect.ui.components.UniConnectLoading
@@ -19,31 +20,27 @@ import com.fbi.uniconnect.ui.components.UniConnectLoading
 @Composable
 fun DashboardScreen(viewModel: StudentViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val student: Student? = state.student
 
     when {
         state.isLoading -> UniConnectLoading()
         state.errorMessage != null -> Text(
-            text = state.errorMessage,
+            text = state.errorMessage ?: "Data mahasiswa gagal dimuat.",
             modifier = Modifier.padding(20.dp),
             color = MaterialTheme.colorScheme.error,
         )
-        state.student != null -> {
-            val student = state.student
-            Column(
-                modifier = Modifier.fillMaxSize().padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text(
-                    text = "Halo, ${student?.name ?: "Mahasiswa"}!",
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                Text("Ringkasan aktivitas akademikmu")
-                student?.let {
-                    SectionCard("IPK Saat Ini") { Text("%.2f".format(it.gpa)) }
-                    SectionCard("Program Studi") { Text(it.studyProgram) }
-                    SectionCard("Semester") { Text(it.semester.toString()) }
-                }
-            }
+        student != null -> Column(
+            modifier = Modifier.fillMaxSize().padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(
+                text = "Halo, ${student.name}!",
+                style = MaterialTheme.typography.headlineSmall,
+            )
+            Text("Ringkasan aktivitas akademikmu")
+            SectionCard("IPK Saat Ini") { Text("%.2f".format(student.gpa)) }
+            SectionCard("Program Studi") { Text(student.studyProgram) }
+            SectionCard("Semester") { Text(student.semester.toString()) }
         }
     }
 }
