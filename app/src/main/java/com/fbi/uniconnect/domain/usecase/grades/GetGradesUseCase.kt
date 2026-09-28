@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetGradesUseCase @Inject constructor(
     private val repository: GradeRepository,
 ) {
-    operator fun invoke(): List<Grade> = repository.getGrades()
+    suspend operator fun invoke(): List<Grade> = repository.getGrades()
 }

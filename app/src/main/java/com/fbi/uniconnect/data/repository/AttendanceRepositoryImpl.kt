@@ -11,6 +11,6 @@ import javax.inject.Singleton
 class AttendanceRepositoryImpl @Inject constructor(
     private val localDataSource: AttendanceLocalDataSource,
 ) : AttendanceRepository {
-    override fun getAttendances(): List<Attendance> =
+    override suspend fun getAttendances(): List<Attendance> =
         localDataSource.getAttendances().map { it.toDomain() }
 }

@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetCurrentAdminUseCase @Inject constructor(
     private val repository: AdminRepository,
 ) {
-    operator fun invoke(): Admin = repository.getCurrentAdmin()
+    suspend operator fun invoke(): Admin = repository.getCurrentAdmin()
 }

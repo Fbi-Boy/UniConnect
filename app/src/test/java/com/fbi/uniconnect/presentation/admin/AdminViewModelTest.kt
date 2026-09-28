@@ -1,18 +1,24 @@
 package com.fbi.uniconnect.presentation.admin
 
+import com.fbi.uniconnect.MainDispatcherRule
+
 import com.fbi.uniconnect.domain.model.Admin
 import com.fbi.uniconnect.domain.repository.AdminRepository
 import com.fbi.uniconnect.domain.usecase.admin.GetCurrentAdminUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Rule
 import org.junit.Test
 
 class AdminViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun loads_current_admin_into_ui_state() {
         val expected = Admin("admin-001", "Fabi", "admin@example.com")
         val repository = object : AdminRepository {
-            override fun getCurrentAdmin(): Admin = expected
+            override suspend fun getCurrentAdmin(): Admin = expected
         }
         val viewModel = AdminViewModel(GetCurrentAdminUseCase(repository))
         assertFalse(viewModel.uiState.value.isLoading)

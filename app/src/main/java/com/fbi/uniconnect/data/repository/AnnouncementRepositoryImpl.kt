@@ -9,6 +9,6 @@ import javax.inject.Inject
 class AnnouncementRepositoryImpl @Inject constructor(
     private val localDataSource: AnnouncementLocalDataSource,
 ) : AnnouncementRepository {
-    override fun getAnnouncements(): List<Announcement> =
+    override suspend fun getAnnouncements(): List<Announcement> =
         localDataSource.getAnnouncements().map { it.toDomain() }
 }

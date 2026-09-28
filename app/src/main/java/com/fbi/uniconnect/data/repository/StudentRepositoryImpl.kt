@@ -9,6 +9,6 @@ import javax.inject.Inject
 class StudentRepositoryImpl @Inject constructor(
     private val localDataSource: StudentLocalDataSource,
 ) : StudentRepository {
-    override fun getCurrentStudent(): Student =
+    override suspend fun getCurrentStudent(): Student =
         localDataSource.getCurrentStudent().toDomain()
 }

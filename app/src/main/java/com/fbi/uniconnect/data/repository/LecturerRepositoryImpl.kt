@@ -11,6 +11,6 @@ import javax.inject.Singleton
 class LecturerRepositoryImpl @Inject constructor(
     private val localDataSource: LecturerLocalDataSource,
 ) : LecturerRepository {
-    override fun getCurrentLecturer(): Lecturer =
+    override suspend fun getCurrentLecturer(): Lecturer =
         localDataSource.getCurrentLecturer().toDomain()
 }
