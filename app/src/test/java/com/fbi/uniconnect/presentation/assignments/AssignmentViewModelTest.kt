@@ -1,5 +1,7 @@
 package com.fbi.uniconnect.presentation.assignments
 
+import com.fbi.uniconnect.MainDispatcherRule
+
 import com.fbi.uniconnect.domain.model.Assignment
 import com.fbi.uniconnect.domain.model.AssignmentStatus
 import com.fbi.uniconnect.domain.repository.AssignmentRepository
@@ -7,9 +9,13 @@ import com.fbi.uniconnect.domain.usecase.assignment.GetAssignmentsUseCase
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 class AssignmentViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun loadsAssignmentsIntoUiState() = runTest(StandardTestDispatcher()) {
         val repository = object : AssignmentRepository {
