@@ -13,7 +13,7 @@ class StudentViewModelTest {
     fun loads_current_student_into_ui_state() {
         val expected = Student("student-001", "Fabi", "12345", "Teknologi Informasi", 3, 3.72)
         val repository = object : StudentRepository {
-            override fun getCurrentStudent(): Student = expected
+            override suspend fun getCurrentStudent(): Student = expected
         }
 
         val viewModel = StudentViewModel(GetCurrentStudentUseCase(repository))
