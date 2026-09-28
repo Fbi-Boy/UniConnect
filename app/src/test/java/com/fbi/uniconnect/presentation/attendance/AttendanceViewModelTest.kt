@@ -20,7 +20,7 @@ class AttendanceViewModelTest {
             ),
         )
         val repository = object : AttendanceRepository {
-            override fun getAttendances(): List<Attendance> = expected
+            override suspend fun getAttendances(): List<Attendance> = expected
         }
 
         val viewModel = AttendanceViewModel(GetAttendancesUseCase(repository))
