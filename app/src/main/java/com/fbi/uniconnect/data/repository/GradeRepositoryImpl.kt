@@ -11,6 +11,6 @@ import javax.inject.Singleton
 class GradeRepositoryImpl @Inject constructor(
     private val localDataSource: GradeLocalDataSource,
 ) : GradeRepository {
-    override fun getGrades(): List<Grade> =
+    override suspend fun getGrades(): List<Grade> =
         localDataSource.getGrades().map { it.toDomain() }
 }
