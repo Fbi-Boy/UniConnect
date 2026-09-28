@@ -21,7 +21,7 @@ enum class AppDestination(
     Register("register", "Register", Icons.Default.AppRegistration),
     Dashboard("dashboard", "Dashboard", Icons.Default.Home, true),
     Schedule("schedule", "Jadwal", Icons.Default.CalendarMonth, true),
-    Attendance("attendance", "Kehadiran", Icons.Default.CheckCircle, true),
+    Attendance("attendance", "Kehadiran", Icons.Default.Person, true),
     Grades("grades", "Nilai", Icons.Default.School, true),
     Profile("profile", "Profil", Icons.Default.Person, true),
     LecturerDashboard("lecturer-dashboard", "Dashboard Dosen", Icons.Default.School),
