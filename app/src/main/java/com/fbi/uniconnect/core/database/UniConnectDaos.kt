@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface StudentDao {
@@ -39,6 +40,15 @@ interface ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<CourseScheduleEntity>)
+
+    @Query("DELETE FROM course_schedules")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<CourseScheduleEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
 }
 
 @Dao
@@ -48,6 +58,15 @@ interface AttendanceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<AttendanceEntity>)
+
+    @Query("DELETE FROM attendances")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<AttendanceEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
 }
 
 @Dao
@@ -57,6 +76,15 @@ interface GradeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<GradeEntity>)
+
+    @Query("DELETE FROM grades")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<GradeEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
 }
 
 @Dao
@@ -66,6 +94,15 @@ interface KrsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<KrsEntity>)
+
+    @Query("DELETE FROM krs")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<KrsEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
 }
 
 @Dao
@@ -75,6 +112,15 @@ interface AssignmentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<AssignmentEntity>)
+
+    @Query("DELETE FROM assignments")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<AssignmentEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
 }
 
 @Dao
@@ -84,4 +130,22 @@ interface AnnouncementDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<AnnouncementEntity>)
+
+    @Query("DELETE FROM announcements")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(items: List<AnnouncementEntity>) {
+        deleteAll()
+        insertAll(items)
+    }
+}
+
+@Dao
+interface AcademicSyncMetadataDao {
+    @Query("SELECT * FROM academic_sync_metadata WHERE id = :id LIMIT 1")
+    suspend fun get(id: String): AcademicSyncMetadataEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(metadata: AcademicSyncMetadataEntity)
 }
